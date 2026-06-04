@@ -1,4 +1,5 @@
 import { EventSourcePolyfill } from "event-source-polyfill";
+import { MOCK_MODE } from "../api/axiosInstance";
 
 let sharedEventSource = null;
 let currentToken = null;
@@ -42,6 +43,30 @@ function ensureConnection(accessToken) {
   }
 
   closeSharedConnection();
+
+  if (MOCK_MODE) {
+    if (typeof window !== "undefined" && window.mockEventBus) {
+      const handleMockEvent = (type, data) => {
+        if (type === "notification") {
+          notifyAll("onNotification", data);
+        } else if (type === "chat_unread_update") {
+          notifyAll("onChatUnreadUpdate", { data: JSON.stringify(data) });
+        }
+      };
+      
+      const unsubscribe = window.mockEventBus.subscribe(handleMockEvent);
+      
+      setTimeout(() => notifyAll("onOpen"), 50);
+
+      sharedEventSource = {
+        close: () => {
+          unsubscribe();
+        }
+      };
+      currentToken = accessToken;
+    }
+    return;
+  }
 
   const apiUrl = `${getBaseURL()}/api/notifications/subscribe`;
 

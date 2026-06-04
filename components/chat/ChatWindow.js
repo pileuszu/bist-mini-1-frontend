@@ -5,6 +5,8 @@ import SockJS from 'sockjs-client';
 import { getMessageHistory, markAsRead, updateMessage, deleteMessage } from '@/api/chatApi';
 import { getMe } from '@/api/memberApi';
 import { getBackendAbsoluteUrl } from '@/utils/urlUtils';
+import { MOCK_MODE } from '@/api/axiosInstance';
+import { MockStompClient } from '@/utils/mockDb';
 
 /**
  * 실시간 채팅 대화창 컴포넌트
@@ -93,6 +95,49 @@ const ChatWindow = ({ room }) => {
     setPage(1);
     setHasMore(true);
     loadHistory(1, true);
+
+    if (MOCK_MODE) {
+      const client = new MockStompClient({
+        onConnect: () => {
+          console.log('STOMP: Connected (Mock)');
+          client.subscribe(`/sub/chat/room/${room.roomId}`, (message) => {
+            const data = JSON.parse(message.body);
+            
+            if (data.messageType === 'READ') {
+              const readerId = Number(data.senderId);
+              if (memberId && readerId !== memberId) {
+                setMessages((prev) => 
+                  prev.map((m) => Number(m.senderId) === memberId ? { ...m, unreadCount: 0 } : m)
+                );
+              }
+            } else if (data.messageType === 'UPDATE') {
+              setMessages((prev) => 
+                prev.map((m) => m.messageId === data.messageId ? { ...m, ...data } : m)
+              );
+            } else if (data.messageType === 'DELETE') {
+              setMessages((prev) => prev.filter((m) => m.messageId !== data.messageId));
+            } else {
+              setMessages((prev) => [...prev, data]);
+              setTimeout(scrollToBottom, 50);
+              
+              if (memberId && Number(data.senderId) !== memberId) {
+                handleMarkAsRead();
+                setMessages((prev) => 
+                  prev.map((m) => Number(m.senderId) === memberId ? { ...m, unreadCount: 0 } : m)
+                );
+              }
+            }
+          });
+        }
+      });
+      client.activate();
+      stompClient.current = client;
+      handleMarkAsRead();
+
+      return () => {
+        if (stompClient.current) stompClient.current.deactivate();
+      };
+    }
 
     const getBaseURL = () => {
       if (process.env.NEXT_PUBLIC_API_BASE_URL) return process.env.NEXT_PUBLIC_API_BASE_URL;
