@@ -183,7 +183,7 @@ const SEED_POSTS = [
     title: "Git 브랜치 전략: Git Flow vs GitHub Flow",
     content: "## Git 브랜치 전략 비교\n\n협업 생산성을 높이기 위한 가장 인기 있는 브랜치 관리 전략 두 가지를 비교합니다.\n\n### Git Flow\n- `master`, `develop`, `feature`, `release`, `hotfix` 5개의 고정 브랜치를 운영합니다.\n- 릴리즈 주기가 길고 체계적인 배포가 필요한 패키지나 금융 소프트웨어에 적합합니다.\n\n### GitHub Flow\n- `main` 브랜치 하나와 자유롭게 이름을 지정한 `feature` 브랜치만으로 운영합니다.\n- Pull Request를 통해 코드 리뷰를 거치고 빌드가 완료되면 즉시 `main`에 병합(배포)합니다.\n- 스타트업이나 웹 서비스 등 지속적 배포(CD)에 최적화된 단순하고 빠른 프로세스입니다.",
     contentPreview: "협업 생산성을 높이기 위한 가장 인기 있는 브랜치 관리 전략 두 가지를 비교합니다. Git Flow와 GitHub Flow의 정의 및 실무 적용 가이드.",
-    thumbnailUrl: null,
+    thumbnailUrl: "https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=500&auto=format&fit=crop&q=60",
     memberId: 4,
     nickname: "박기획",
     likeCount: 31,
@@ -212,7 +212,7 @@ const generateExtraPosts = () => {
     "https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=500&auto=format&fit=crop&q=60",
     "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=500&auto=format&fit=crop&q=60",
     "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&auto=format&fit=crop&q=60",
-    null
+    "https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=500&auto=format&fit=crop&q=60"
   ];
 
   for (let i = 1; i <= 32; i++) {
@@ -302,7 +302,7 @@ const SEED_NOTIFICATIONS = [
 export const initMockDb = () => {
   if (typeof window === "undefined") return;
 
-  if (!localStorage.getItem(DB_PREFIX + "initialized")) {
+  if (localStorage.getItem(DB_PREFIX + "initialized") !== "v3") {
     setStorageItem("members", SEED_MEMBERS);
     setStorageItem("tags", SEED_TAGS);
     setStorageItem("posts", [...SEED_POSTS, ...generateExtraPosts()]);
@@ -310,7 +310,7 @@ export const initMockDb = () => {
     setStorageItem("follows", SEED_FOLLOWS);
     setStorageItem("chats", SEED_CHATS);
     setStorageItem("notifications", SEED_NOTIFICATIONS);
-    localStorage.setItem(DB_PREFIX + "initialized", "true");
+    localStorage.setItem(DB_PREFIX + "initialized", "v3");
 
     // Automatically authenticate the default user (gildong)
     const mockToken = "header." + btoa(JSON.stringify({
@@ -467,7 +467,7 @@ export const dbCreatePost = (data, token) => {
     title: data.title,
     content: data.content,
     contentPreview: data.content.substring(0, 150),
-    thumbnailUrl: data.thumbnailUrl || null,
+    thumbnailUrl: data.thumbnailUrl || "https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=500&auto=format&fit=crop&q=60",
     memberId: me.memberId,
     nickname: me.nickname,
     likeCount: 0,
