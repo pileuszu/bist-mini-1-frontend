@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import useAuth from "../../hooks/useAuth";
 import Image from "next/image";
 import NotificationBell from "../notification/NotificationBell";
-import { getBackendAbsoluteUrl } from "../../utils/urlUtils";
+import { getBackendAbsoluteUrl, getFrontendAssetUrl } from "../../utils/urlUtils";
 import { getMyProfileImage } from "../../api/mypageApi";
 import { useEffect, useState } from "react";
 
@@ -51,7 +51,7 @@ export default function AppHeader() {
         <Link href="/" className="navbar-brand d-flex align-items-center m-0">
           <div className="slog-header-logo-wrap">
             <Image
-              src="/images/slog-logo.png"
+              src={getFrontendAssetUrl("/images/slog-logo.png")}
               alt="SLog 로고"
               fill
               priority

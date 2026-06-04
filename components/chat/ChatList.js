@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getChatRooms, getFollowingList, getOrCreatePersonalRoom } from '@/api/chatApi';
 import useAuth from '@/hooks/useAuth';
-import { getBackendAbsoluteUrl } from '@/utils/urlUtils';
+import { getBackendAbsoluteUrl, getFrontendAssetUrl } from '@/utils/urlUtils';
 
 /**
  * 채팅방 목록 및 팔로우 목록 컴포넌트
@@ -128,7 +128,7 @@ const ChatList = ({ onSelectRoom }) => {
                 >
                   <div className="flex-shrink-0" style={{ width: '45px', height: '45px', position: 'relative' }}>
                     <Image 
-                      src={room.partnerProfileImage ? getBackendAbsoluteUrl(room.partnerProfileImage) : '/images/default-profile.png'} 
+                      src={room.partnerProfileImage ? getBackendAbsoluteUrl(room.partnerProfileImage) : getFrontendAssetUrl('/images/default-profile.png')} 
                       alt="profile" 
                       className="rounded-circle"
                       fill
@@ -175,7 +175,7 @@ const ChatList = ({ onSelectRoom }) => {
                 >
                   <div className="flex-shrink-0" style={{ width: '40px', height: '40px', position: 'relative' }}>
                     <Image 
-                      src={member.profileImage ? getBackendAbsoluteUrl(member.profileImage) : '/images/default-profile.png'} 
+                      src={member.profileImage ? getBackendAbsoluteUrl(member.profileImage) : getFrontendAssetUrl('/images/default-profile.png')} 
                       alt="profile" 
                       className="rounded-circle"
                       fill

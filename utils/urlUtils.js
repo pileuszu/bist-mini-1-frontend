@@ -23,3 +23,12 @@ export const getBackendAbsoluteUrl = (relativePath) => {
   // 기본값 (로컬 개발 시)
   return `http://localhost:8080${relativePath}`;
 };
+
+export const getFrontendAssetUrl = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${basePath}${cleanPath}`;
+};

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import JoinForm from "@/components/member/JoinForm";
+import { getFrontendAssetUrl } from "@/utils/urlUtils";
 
 export default function JoinPage() {
   return (
@@ -10,7 +11,7 @@ export default function JoinPage() {
             <div className="slog-join-logo-wrap">
               <div className="slog-join-logo-box">
                 <Image
-                  src="/images/slog-logo.png"
+                  src={getFrontendAssetUrl("/images/slog-logo.png")}
                   alt="SLog 로고"
                   fill
                   priority

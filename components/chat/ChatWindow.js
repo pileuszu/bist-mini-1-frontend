@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { getMessageHistory, markAsRead, updateMessage, deleteMessage } from '@/api/chatApi';
 import { getMe } from '@/api/memberApi';
-import { getBackendAbsoluteUrl } from '@/utils/urlUtils';
+import { getBackendAbsoluteUrl, getFrontendAssetUrl } from '@/utils/urlUtils';
 import { MOCK_MODE } from '@/api/axiosInstance';
 import { MockStompClient } from '@/utils/mockDb';
 
@@ -298,7 +298,7 @@ const ChatWindow = ({ room }) => {
                 {!isMine && (
                   <div className="me-2 mt-1" style={{ width: '30px', height: '30px', position: 'relative' }}>
                     <Image 
-                      src={msg.senderProfileImage ? getBackendAbsoluteUrl(msg.senderProfileImage) : "/images/default-profile.png"} 
+                      src={msg.senderProfileImage ? getBackendAbsoluteUrl(msg.senderProfileImage) : getFrontendAssetUrl("/images/default-profile.png")} 
                       alt="p" 
                       className="rounded-circle" 
                       fill
@@ -393,7 +393,7 @@ const ChatWindow = ({ room }) => {
                     {isMine && (
                       <div className="ms-2 mt-1" style={{ width: '30px', height: '30px', position: 'relative' }}>
                         <Image 
-                          src={msg.senderProfileImage ? getBackendAbsoluteUrl(msg.senderProfileImage) : "/images/default-profile.png"} 
+                          src={msg.senderProfileImage ? getBackendAbsoluteUrl(msg.senderProfileImage) : getFrontendAssetUrl("/images/default-profile.png")} 
                           alt="p" 
                           className="rounded-circle" 
                           fill

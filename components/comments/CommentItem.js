@@ -6,7 +6,7 @@ import CommentForm from "./CommentForm";
 import { updateComment, deleteComment, createComment, checkIsMyComment, toggleCommentLike } from "@/api/commentApi";
 import useAuth from "@/hooks/useAuth";
 import Image from "next/image";
-import { getBackendAbsoluteUrl } from "@/utils/urlUtils";
+import { getBackendAbsoluteUrl, getFrontendAssetUrl } from "@/utils/urlUtils";
 
 function CommentItem({ comment, isReply = false, onRefresh, postId, postAuthorId, isNew, newCommentId, isBest }) {
   const { authInfo } = useAuth();
@@ -202,7 +202,7 @@ function CommentItem({ comment, isReply = false, onRefresh, postId, postAuthorId
         <Link href={`/Mypage/user/${comment.memberId}`} className="text-decoration-none">
           <div style={avatarStyle}>
             <Image 
-              src={comment.profileImageUrl ? getBackendAbsoluteUrl(comment.profileImageUrl) : "/images/default-profile.png"} 
+              src={comment.profileImageUrl ? getBackendAbsoluteUrl(comment.profileImageUrl) : getFrontendAssetUrl("/images/default-profile.png")} 
               alt={comment.nickname || "User"} 
               width={isReply ? 32 : 40} 
               height={isReply ? 32 : 40} 
